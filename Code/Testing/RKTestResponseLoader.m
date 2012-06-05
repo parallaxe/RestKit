@@ -168,4 +168,12 @@ NSString * const RKTestResponseLoaderTimeoutException = @"RKTestResponseLoaderTi
     successful = NO;
 }
 
+#pragma mark - RKRequestQueueDelegate methods
+
+- (void)requestQueueDidFinishLoading:(RKRequestQueue *)queue
+{
+    awaitingResponse = NO;
+    successful = YES;
+}
+
 @end
