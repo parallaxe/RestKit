@@ -9,18 +9,23 @@
 #import "RKTestNotificationObserver.h"
 
 @interface RKTestNotificationObserver ()
+@property (nonatomic, assign, getter = isObserverAdded) BOOL observerAdded;
 @property (nonatomic, assign, getter = isAwaitingNotification) BOOL awaitingNotification;
+@property (nonatomic, retain) NSDate *startDate;
 @end
 
 @implementation RKTestNotificationObserver
 
-@synthesize object;
-@synthesize name;
-@synthesize timeout;
-@synthesize awaitingNotification;
+@synthesize object = _object;
+@synthesize name = _name;
+@synthesize timeout = _timeout;
+@synthesize awaitingNotification = _awaitingNotification;
+@synthesize observerAdded = _observerAdded;
+@synthesize startDate = _startDate;
 
 + (void)waitForNotificationWithName:(NSString *)name object:(id)object usingBlock:(void(^)())block {
     RKTestNotificationObserver *observer = [RKTestNotificationObserver notificationObserverForName:name object:object];
+    [observer addObserver];
     block();
     [observer waitForNotification];
 }
@@ -47,8 +52,8 @@
 - (id)init {
     self = [super init];
     if (self) {
-        timeout = 5;
-        awaitingNotification = NO;
+        _timeout = 5;
+        _awaitingNotification = NO;
     }
     return self;
 }
@@ -58,31 +63,37 @@
     [super dealloc];
 }
 
-- (void)waitForNotification {
-    NSAssert(name, @"Notification name cannot be nil");
-
+- (void)addObserver {
+    if (self.isObserverAdded) return;
+    
+    NSAssert(_name, @"Notification name cannot be nil");
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(processNotification:)
                                                  name:self.name
                                                object:self.object];
+    self.observerAdded = YES;
+    self.awaitingNotification = YES;
+    self.startDate = [NSDate date];
+}
 
-    awaitingNotification = YES;
-    NSDate *startDate = [NSDate date];
+- (void)waitForNotification {
+    [self addObserver];        
 
     while (self.isAwaitingNotification) {
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
-        if ([[NSDate date] timeIntervalSinceDate:startDate] > self.timeout) {
+        if ([[NSDate date] timeIntervalSinceDate:self.startDate] > self.timeout) {
             [NSException raise:nil format:@"*** Operation timed out after %f seconds...", self.timeout];
-            awaitingNotification = NO;
+            self.awaitingNotification = NO;
         }
     }
 }
 
-- (void)processNotification:(NSNotification*)notification {
-    NSAssert([name isEqualToString:notification.name],
+- (void)processNotification:(NSNotification *)notification {
+    NSAssert([self.name isEqualToString:notification.name],
              @"Received notification (%@) differs from expected notification (%@)",
-             notification.name, name);
-    awaitingNotification = NO;
+             notification.name, self.name);
+    self.awaitingNotification = NO;
 }
 
 @end
