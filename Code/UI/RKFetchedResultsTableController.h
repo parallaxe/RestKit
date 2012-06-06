@@ -61,6 +61,5 @@ typedef UIView *(^RKFetchedResultsTableViewViewForHeaderInSectionBlock)(NSUInteg
 - (void)setObjectMappingForClass:(Class)objectClass;
 - (void)loadTable;
 - (void)loadTableFromNetwork;
-- (NSIndexPath *)indexPathForObject:(id)object;
 
 @end

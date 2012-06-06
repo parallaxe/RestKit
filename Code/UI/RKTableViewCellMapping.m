@@ -77,6 +77,10 @@ typedef void(^RKControlBlockActionBlock)(id sender);
 
 @end
 
+@interface RKTableViewCellMapping ()
+@property (nonatomic, retain) NSMutableArray *prepareCellBlocks;    
+@end
+
 @implementation RKTableViewCellMapping
 
 @synthesize reuseIdentifier = _reuseIdentifier;
@@ -93,7 +97,8 @@ typedef void(^RKControlBlockActionBlock)(id sender);
 @synthesize targetIndexPathForMove = _targetIndexPathForMove;
 @synthesize rowHeight = _rowHeight;
 @synthesize deselectsRowOnSelection = _deselectsRowOnSelection;
-@synthesize managesCellAttributes;
+@synthesize managesCellAttributes = _managesCellAttributes;
+@synthesize prepareCellBlocks = _prepareCellBlocks;
 
 + (id)cellMapping {
     return [self mappingForClass:[UITableViewCell class]];
@@ -189,9 +194,12 @@ typedef void(^RKControlBlockActionBlock)(id sender);
     NSAssert([tableView isKindOfClass:[UITableView class]], @"Expected to be invoked with a tableView as the data. Got %@", tableView);
     RKLogTrace(@"About to dequeue reusable cell using self.reuseIdentifier=%@", self.reuseIdentifier);
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:self.reuseIdentifier];
-    if (! cell) {
+    if (cell) {
+        RKLogTrace(@"Dequeued existing cell object for reuse identifier '%@': %@", self.reuseIdentifier, cell);
+    } else {        
         cell = [[[self.objectClass alloc] initWithStyle:self.style
                                        reuseIdentifier:self.reuseIdentifier] autorelease];
+        RKLogTrace(@"Failed to dequeue existing cell object for reuse identifier '%@', instantiated new cell: %@", self.reuseIdentifier, cell);
     }
 
     if (self.managesCellAttributes) {
