@@ -80,6 +80,10 @@ static NSString * lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey"
 @synthesize autoResizesForKeyboard = _autoResizesForKeyboard;
 @synthesize emptyItem = _emptyItem;
 
+@synthesize onSelectCellForObjectAtIndexPath = _onSelectCellForObjectAtIndexPath;
+@synthesize onPrepareCellForObjectAtIndexPath = _onPrepareCellForObjectAtIndexPath;
+@synthesize onWillDisplayCellForObjectAtIndexPath = _onWillDisplayCellForObjectAtIndexPath;
+
 @synthesize cellSwipeViewsEnabled = _cellSwipeViewsEnabled;
 @synthesize cellSwipeView = _cellSwipeView;
 @synthesize swipeCell = _swipeCell;
@@ -183,6 +187,11 @@ static NSString * lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey"
     [_objectLoader release];
     _objectLoader = nil;
     
+    // Blocks
+    [_onSelectCellForObjectAtIndexPath release];
+    [_onPrepareCellForObjectAtIndexPath release];
+    [_onWillDisplayCellForObjectAtIndexPath release];
+
     [_cellMappings release];
     [_headerItems release];
     [_footerItems release];
@@ -429,6 +438,11 @@ static NSString * lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey"
     NSAssert(theTableView == self.tableView, @"tableView:cellForRowAtIndexPath: invoked with inappropriate tableView: %@", theTableView);
     UITableViewCell *cell = [self cellForObjectAtIndexPath:indexPath];
     
+    if (self.onPrepareCellForObjectAtIndexPath) {
+        id object = [self objectForRowAtIndexPath:indexPath];
+        self.onPrepareCellForObjectAtIndexPath(cell, object, indexPath);
+    }
+
     RKLogTrace(@"%@ cellForRowAtIndexPath:%@ = %@", self, indexPath, cell);
     return cell;
 }
@@ -465,6 +479,11 @@ static NSString * lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey"
         cellMapping.onSelectCellForObjectAtIndexPath(cell, object, indexPath);
     }
     
+    // Table level selection callbacks
+    if (self.onSelectCellForObjectAtIndexPath) {
+        self.onSelectCellForObjectAtIndexPath(cell, object, indexPath);
+    }
+
     if ([self.delegate respondsToSelector:@selector(tableController:didSelectCell:forObject:atIndexPath:)]) {
         [self.delegate tableController:self didSelectCell:cell forObject:object atIndexPath:indexPath];
     }
@@ -479,6 +498,10 @@ static NSString * lastUpdatedDateDictionaryKey = @"lastUpdatedDateDictionaryKey"
         cellMapping.onCellWillAppearForObjectAtIndexPath(cell, mappableObject, indexPath);
     }
     
+    if (self.onWillDisplayCellForObjectAtIndexPath) {
+        self.onWillDisplayCellForObjectAtIndexPath(cell, mappableObject, indexPath);
+    }
+
     if ([self.delegate respondsToSelector:@selector(tableController:willDisplayCell:forObject:atIndexPath:)]) {
         [self.delegate tableController:self willDisplayCell:cell forObject:mappableObject atIndexPath:indexPath];
     }
