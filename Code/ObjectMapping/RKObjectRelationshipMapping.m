@@ -48,4 +48,13 @@
     [super dealloc];
 }
 
+- (BOOL)isEqualToMapping:(RKObjectRelationshipMapping *)otherMapping
+{
+    if (! [otherMapping isMemberOfClass:[RKObjectRelationshipMapping class]]) return NO;
+    if (! [super isEqualToMapping:otherMapping]) return NO;
+    if (self.mapping == nil && otherMapping.mapping == nil) return YES;
+    
+    return [self.mapping isEqualToMapping:otherMapping.mapping];
+}
+
 @end

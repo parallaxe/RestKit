@@ -46,4 +46,6 @@
  */
 - (BOOL)isMappingForKeyOfNestedDictionary;
 
+- (BOOL)isEqualToMapping:(RKObjectAttributeMapping *)mapping;
+
 @end

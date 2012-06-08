@@ -22,18 +22,15 @@
 #import "RKObjectAttributeMapping.h"
 #import "RKObjectMappingDefinition.h"
 
-@class RKObjectmapping;
+@interface RKObjectRelationshipMapping : RKObjectAttributeMapping
 
-@interface RKObjectRelationshipMapping : RKObjectAttributeMapping {
-    RKObjectMappingDefinition * _mapping;
-    BOOL _reversible;
-}
-
-@property (nonatomic, retain) RKObjectMappingDefinition * mapping;
+@property (nonatomic, retain) RKObjectMappingDefinition *mapping;
 @property (nonatomic, assign) BOOL reversible;
 
 + (RKObjectRelationshipMapping*)mappingFromKeyPath:(NSString*)sourceKeyPath toKeyPath:(NSString*)destinationKeyPath withMapping:(RKObjectMappingDefinition *)objectOrDynamicMapping;
 
 + (RKObjectRelationshipMapping*)mappingFromKeyPath:(NSString*)sourceKeyPath toKeyPath:(NSString*)destinationKeyPath withMapping:(RKObjectMappingDefinition *)objectOrDynamicMapping reversible:(BOOL)reversible;
+
+- (BOOL)isEqualToMapping:(RKObjectRelationshipMapping *)mapping;
 
 @end

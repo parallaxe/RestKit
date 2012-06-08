@@ -47,6 +47,13 @@ extern NSString* const RKObjectMappingNestingAttributeKeyName;
     return copy;
 }
 
+- (BOOL)isEqualToMapping:(RKObjectAttributeMapping *)mapping
+{
+    return [mapping isKindOfClass:[RKObjectAttributeMapping class]] &&
+    [_sourceKeyPath isEqual:mapping.sourceKeyPath] &&
+    [_destinationKeyPath isEqual:mapping.destinationKeyPath];
+}
+
 - (void)dealloc {
     [_sourceKeyPath release];
     [_destinationKeyPath release];
