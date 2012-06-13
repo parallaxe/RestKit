@@ -101,6 +101,11 @@
     return _tableController.tableView;
 }
 
+- (void)addObject:(id)object
+{
+    return [self insertObject:object atIndex:[_objects count]];
+}
+
 - (void)insertObject:(id)object atIndex:(NSUInteger)index {
     [(NSMutableArray*)_objects insertObject:object atIndex:index];
 
