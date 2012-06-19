@@ -29,6 +29,9 @@
 #import "RKConfigurationDelegate.h"
 #import "RKRouter.h"
 
+// Retrieves the dispatch queue for emitting network processing events
+dispatch_queue_t rk_get_network_processing_queue(void);
+
 /**
  RKClient exposes the low level client interface for working with HTTP servers
  and RESTful services. It wraps the request/response cycle with a clean, simple
@@ -82,6 +85,7 @@
  provided via the RKRequestSerializable protocol and is not specific to
  NSDictionary objects.
 
+ 
  ### Sending Asynchronous Requests
 
  A handful of methods are provided as a convenience to cover the common
