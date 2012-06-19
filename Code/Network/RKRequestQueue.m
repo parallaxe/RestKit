@@ -218,7 +218,7 @@ static const NSTimeInterval kFlushDelay = 0.3;
 }
 
 - (void)removeLoadingRequest:(RKRequest*)request {
-    if (self.loadingCount == 1 && [_loadingRequests containsObject:request]) {
+    if ([self nextRequest] == nil && self.loadingCount == 1 && [_loadingRequests containsObject:request]) {
         RKLogTrace(@"Loading count decreasing from 1 to 0. Firing requestQueueDidFinishLoading");
 
         // Transition from processing to empty
@@ -250,8 +250,7 @@ static const NSTimeInterval kFlushDelay = 0.3;
 }
 
 - (RKRequest*)nextRequest {
-    for (NSUInteger i = 0; i < [_requests count]; i++) {
-        RKRequest* request = [_requests objectAtIndex:i];
+    for (RKRequest *request in _requests) {
         if ([request isUnsent]) {
             return request;
         }
