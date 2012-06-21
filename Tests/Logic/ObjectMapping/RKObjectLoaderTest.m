@@ -277,7 +277,7 @@
     RKObjectMapping* serializationMapping = [mapping inverseMapping];
 
     RKObjectManager* objectManager = [RKTestFactory objectManager];
-    [objectManager.router addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/204"method:RKRequestMethodAny]];
+    [objectManager.router.routeSet addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/204"method:RKRequestMethodAny]];
     [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKTestComplexUser class]];
 
     RKTestComplexUser* user = [[RKTestComplexUser new] autorelease];
@@ -301,7 +301,7 @@
     RKObjectMapping* serializationMapping = [mapping inverseMapping];
 
     RKObjectManager* objectManager = [RKTestFactory objectManager];
-    [objectManager.router addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUsed" method:RKRequestMethodAny]];
+    [objectManager.router.routeSet addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUsed" method:RKRequestMethodAny]];
     [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKTestComplexUser class]];
 
     RKTestComplexUser* user = [[RKTestComplexUser new] autorelease];
@@ -329,7 +329,7 @@
 
     RKObjectManager* objectManager = [RKTestFactory objectManager];
     [[RKParserRegistry sharedRegistry] setParserClass:[RKJSONParserJSONKit class] forMIMEType:@"text/html"];
-    [objectManager.router addRouteWithClass:[RKTestComplexUser class] resourcePathPattern:@"/noMIME"];
+    [objectManager.router.routeSet addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/noMIME" method:RKRequestMethodAny]];
     [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKTestComplexUser class]];
 
     RKTestComplexUser* user = [[RKTestComplexUser new] autorelease];
@@ -356,7 +356,7 @@
     [targetMapping mapAttributes:@"ID", nil];
 
     RKObjectManager* objectManager = [RKTestFactory objectManager];
-    [objectManager.router addRouteWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUser"];
+    [objectManager.router.routeSet addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUser" method:RKRequestMethodAny]];
     [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKTestComplexUser class]];
 
     RKTestComplexUser* user = [[RKTestComplexUser new] autorelease];
@@ -392,7 +392,7 @@
     [targetMapping mapAttributes:@"ID", nil];
 
     RKObjectManager* objectManager = [RKTestFactory objectManager];
-    [objectManager.router addRouteWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUser"];
+    [objectManager.router.routeSet addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUser" method:RKRequestMethodAny]];
     [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKTestComplexUser class]];
     [objectManager.mappingProvider setObjectMapping:targetMapping forResourcePathPattern:@"/notNestedUser"];
 
@@ -426,7 +426,7 @@
     RKObjectMapping* serializationMapping = [mapping inverseMapping];
 
     RKObjectManager* objectManager = [RKTestFactory objectManager];
-    [objectManager.router addRouteWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUser"];
+    [objectManager.router.routeSet addRoute:[RKRoute routeWithClass:[RKTestComplexUser class] resourcePathPattern:@"/notNestedUser" method:RKRequestMethodAny]];
     [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKTestComplexUser class]];
 
     RKTestComplexUser* user = [[RKTestComplexUser new] autorelease];
